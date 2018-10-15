@@ -38,10 +38,10 @@ public class VarianceTest {
         Assert.assertTrue(Double.isNaN(variance.calcAverage()));
     }
 
-    @Test(expected = NumberFormatException.class)
-    public void testMoyenneValeurInvalide() {
-        variance.readFile();
-    }
+//    @Test(expected = NumberFormatException.class)
+//    public void testMoyenneValeurInvalide() {
+//        variance.readFile();
+//    }
 
 
     // Variance
@@ -60,10 +60,10 @@ public class VarianceTest {
         Assert.assertTrue(Double.isNaN(variance.calcVariance(aver)));
     }
 
-    @Test(expected = NumberFormatException.class)
-    public void testVarianceValeurInvalide() {
-        variance.readFile();
-    }
+//    @Test(expected = NumberFormatException.class)
+//    public void testVarianceValeurInvalide() {
+//        variance.readFile();
+//    }
 
 
     // Ecart type
@@ -82,10 +82,10 @@ public class VarianceTest {
         Variance.listNumbers = listNumbers;
         Assert.assertTrue(Double.isNaN(variance.calcAverage()));
     }
-
-    @Test(expected = NumberFormatException.class)
-    public void testEcartTypeValeurInvalide() {
-        variance.readFile();
-    }
+//
+//    @Test(expected = NumberFormatException.class)
+//    public void testEcartTypeValeurInvalide() {
+//        variance.readFile();
+//    }
 
 }
