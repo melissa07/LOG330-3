@@ -75,4 +75,33 @@ public class VarianceTest {
         Assert.assertTrue(Double.isNaN(variance.calcAverage()));
     }
 
+    @Test
+    public void testCorrelationNulleaFaible() {
+        double corr = 0.152;
+        Assert.assertTrue(variance.interpreterCorr(corr).equals("Correlation nulle a faible"));
+    }
+
+    @Test
+    public void testCorrelationFaibleaMoyenne() {
+        double corr = 0.20;
+        Assert.assertTrue(variance.interpreterCorr(corr).equals("Correlation faible a moyenne"));
+    }
+
+    @Test
+    public void testCorrelationMoyenneaForte() {
+        double corr = 0.44;
+        Assert.assertTrue(variance.interpreterCorr(corr).equals("Correlation moyenne a forte"));
+    }
+
+    @Test
+    public void testCorrelationForteaTresForte() {
+        double corr = 0.89;
+        Assert.assertTrue(variance.interpreterCorr(corr).equals("Correlation forte a tres forte"));
+    }
+
+    @Test
+    public void testCorrelationTresForteAParfaite() {
+        double corr = 0.96;
+        Assert.assertTrue(variance.interpreterCorr(corr).equals("Correlation tres forte a parfaite"));
+    }
 }
