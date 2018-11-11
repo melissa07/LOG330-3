@@ -11,6 +11,8 @@ public class Variance {
     public static ArrayList<Double> listNumbers = null;
     public static ArrayList<Double> corrCol1 = null;
     public static ArrayList<Double> corrCol2 = null;
+    double somme_X = 0, somme_Y = 0, somme_XY = 0, squareSum_X = 0, squareSum_Y = 0;
+
 
     public Variance() {
         listNumbers = readFile();
@@ -27,7 +29,13 @@ public class Variance {
         System.out.println("Correlation interpretation: " +corrInterpreation);
 
         readTwoColumnsFile(fileNameRegression);
-        caclCoefficients();
+        double b1 = calcCoefficientB1();
+        System.out.println("B1: " +b1);
+
+
+        double b0 = calcCoefficientB0(b1);
+        System.out.println("B0: " +b0);
+
     }
 
     /**
@@ -188,24 +196,32 @@ public class Variance {
         return "imposible";
     }
 
-    public void caclCoefficients() {
+    public double calcCoefficientB1() {
         double somme_X = 0, somme_Y = 0, somme_XY = 0, squareSum_X = 0, squareSum_Y = 0;
         double b0 = 0, b1 = 0;
 
-        for (int i = 0; i < corrCol1.size(); i++)
-        {
-            somme_X = somme_X + corrCol1.get(i);
-            somme_Y = somme_Y + corrCol2.get(i);
-            somme_XY = somme_XY + corrCol1.get(i) * corrCol2.get(i);
+        if(corrCol1.size() == corrCol2.size()) {
+            for (int i = 0; i < corrCol1.size(); i++)
+            {
+                somme_X = somme_X + corrCol1.get(i);
+                somme_Y = somme_Y + corrCol2.get(i);
+                somme_XY = somme_XY + corrCol1.get(i) * corrCol2.get(i);
 
-            squareSum_X = squareSum_X + corrCol1.get(i) * corrCol1.get(i);
-            squareSum_Y = squareSum_Y + corrCol2.get(i) * corrCol2.get(i);
+                squareSum_X = squareSum_X + corrCol1.get(i) * corrCol1.get(i);
+                squareSum_Y = squareSum_Y + corrCol2.get(i) * corrCol2.get(i);
+            }
+
+            b1 = (somme_XY-(corrCol1.size()*(somme_X/corrCol1.size())*(somme_Y/corrCol2.size())))/ (squareSum_X-(corrCol1.size()*(somme_X/corrCol1.size())* (somme_X/corrCol1.size())));
         }
 
-        b1 = (somme_XY-(corrCol1.size()*(somme_X/corrCol1.size())*(somme_Y/corrCol2.size())))/ (squareSum_X-(corrCol1.size()*(somme_X/corrCol1.size())* (somme_X/corrCol1.size())));
-        b0 = (somme_Y/corrCol2.size()- b1*(somme_X/corrCol1.size()));
 
-        System.out.println("B0: " +b0);
-        System.out.println("B1: " +b1);
+        return b1;
     }
+
+
+    public double calcCoefficientB0(double b1) {
+        return (somme_Y/corrCol2.size()- b1*(somme_X/corrCol1.size()));
+    }
+
 }
+

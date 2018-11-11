@@ -21,6 +21,7 @@ public class VarianceTest {
     @After
     public void tearDown() throws Exception {
         listNumbers = null;
+        variance = null;
     }
 
     // Moyenne
@@ -104,4 +105,17 @@ public class VarianceTest {
         double corr = 0.96;
         Assert.assertTrue(variance.interpreterCorr(corr).equals("Correlation tres forte a parfaite"));
     }
+
+
+    @Test(expected = java.lang.ArithmeticException.class)
+    public void testRegressioNDivisionParZero() {
+            Variance.corrCol1.clear();
+            Variance.corrCol2.clear();
+
+            Variance.corrCol1.add(0.0);
+            Variance.corrCol2.add(0.0);
+
+    }
+
+
 }
