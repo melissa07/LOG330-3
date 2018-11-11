@@ -6,6 +6,7 @@ import java.util.Scanner;
 public class Variance {
     private final String fileName= "donnees.csv";
     private final String fileNameCorrelation = "donnees_correlation.csv";
+    public final String fileNameRegression = "donnees_regression.csv";
     private File file = null;
     public static ArrayList<Double> listNumbers = null;
     public static ArrayList<Double> corrCol1 = null;
@@ -20,12 +21,13 @@ public class Variance {
         double sd = calcStandardDev(variance);
         System.out.println("Standard deviation: " +sd);
 
-        readCorrFile();
+        readTwoColumnsFile(fileNameRegression);
         float corr = calcCorrelation();
         String corrInterpreation = interpreterCorr(corr);
-
         System.out.println("Correlation interpretation: " +corrInterpreation);
 
+        readTwoColumnsFile(fileNameRegression);
+        caclCoefficients();
     }
 
     /**
@@ -104,11 +106,11 @@ public class Variance {
      * Lecture du fichier contenant les donnees pour le calcul
      * de la correlation
      */
-    public void readCorrFile() {
+    public void readTwoColumnsFile(String fileName) {
         file = null;
         corrCol1 = new ArrayList<>();
         corrCol2 = new ArrayList<>();
-        file = new File(fileNameCorrelation);
+        file = new File(fileName);
 
         ArrayList<Double> lines = new ArrayList<Double>();
         Scanner inputStream;
@@ -184,5 +186,26 @@ public class Variance {
         }
 
         return "imposible";
+    }
+
+    public void caclCoefficients() {
+        double somme_X = 0, somme_Y = 0, somme_XY = 0, squareSum_X = 0, squareSum_Y = 0;
+        double b0 = 0, b1 = 0;
+
+        for (int i = 0; i < corrCol1.size(); i++)
+        {
+            somme_X = somme_X + corrCol1.get(i);
+            somme_Y = somme_Y + corrCol2.get(i);
+            somme_XY = somme_XY + corrCol1.get(i) * corrCol2.get(i);
+
+            squareSum_X = squareSum_X + corrCol1.get(i) * corrCol1.get(i);
+            squareSum_Y = squareSum_Y + corrCol2.get(i) * corrCol2.get(i);
+        }
+
+        b1 = (somme_XY-(corrCol1.size()*(somme_X/corrCol1.size())*(somme_Y/corrCol2.size())))/ (squareSum_X-(corrCol1.size()*(somme_X/corrCol1.size())* (somme_X/corrCol1.size())));
+        b0 = (somme_Y/corrCol2.size()- b1*(somme_X/corrCol1.size()));
+
+        System.out.println("B0: " +b0);
+        System.out.println("B1: " +b1);
     }
 }
