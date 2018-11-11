@@ -118,4 +118,21 @@ public class VarianceTest {
     }
 
 
+    @Test
+    public void testRegressionEmpyList() {
+        Variance.corrCol1.clear();
+        Variance.corrCol2.clear();
+
+        Assert.assertTrue(Double.isNaN(variance.calcCoefficientB1()));
+
+    }
+
+    @Test
+    public void testRegressionPass() {
+        double b1 = variance.calcCoefficientB1();
+        Assert.assertEquals(1.7279, b1 , 0.01);
+        Assert.assertEquals(0, variance.calcCoefficientB0(b1) , 0.01);
+
+    }
+
 }
