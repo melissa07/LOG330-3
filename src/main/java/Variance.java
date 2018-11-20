@@ -7,6 +7,8 @@ public class Variance {
     private final String fileName= "donnees.csv";
     private final String fileNameCorrelation = "donnees_correlation.csv";
     public final String fileNameRegression = "donnees_regression.csv";
+    public final String fileNameEffortGrade = "donnees_efforts_note.csv";
+
     private File file = null;
     public static ArrayList<Double> listNumbers = null;
     public static ArrayList<Double> corrCol1 = null;
@@ -23,18 +25,24 @@ public class Variance {
         double sd = calcStandardDev(variance);
         System.out.println("Standard deviation: " +sd);
 
-        readTwoColumnsFile(fileNameRegression);
+        // Correlation
+        readTwoColumnsFile(fileNameCorrelation);
         float corr = calcCorrelation();
         String corrInterpreation = interpreterCorr(corr);
         System.out.println("Correlation interpretation: " +corrInterpreation);
 
+        // Regression
         readTwoColumnsFile(fileNameRegression);
         double b1 = calcCoefficientB1();
         System.out.println("B1: " +b1);
-
-
         double b0 = calcCoefficientB0(b1);
         System.out.println("B0: " +b0);
+
+        // Correlation effort/note
+        readMultiColumnsFile(fileNameEffortGrade);
+        float correlation_note_effort = calcCorrelation();
+        String interp = interpreterCorr(correlation_note_effort);
+        System.out.println("Correlation note-effort interpretation: " +interp);
 
     }
 
@@ -131,6 +139,38 @@ public class Variance {
                 String[] corrDatas = line.split(";");
                 corrCol1.add(Double.parseDouble(corrDatas[0].replaceAll(",", ".")));
                 corrCol2.add(Double.parseDouble(corrDatas[1].replaceAll(",", ".")));
+            }
+
+            inputStream.close();
+        }catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }catch(NumberFormatException nf) {
+            nf.printStackTrace();
+        }
+    }
+
+    public void readMultiColumnsFile(String fileName) {
+        file = null;
+        corrCol1 = new ArrayList<>();
+        corrCol2 = new ArrayList<>();
+        file = new File(fileName);
+        double sumHours = 0.0;
+
+        ArrayList<Double> lines = new ArrayList<Double>();
+        Scanner inputStream;
+
+        try{
+            inputStream = new Scanner(file);
+
+            while(inputStream.hasNext()){
+                sumHours = 0;
+                String line= inputStream.next();
+                String[] corrDatas = line.split(";");
+                for (int i=1; i<corrDatas.length-1; i++) {
+                    sumHours += Double.parseDouble(corrDatas[i].replaceAll(",", "."));
+                }
+                corrCol1.add(sumHours);
+                corrCol2.add(Double.parseDouble(corrDatas[corrDatas.length-1].replaceAll(",", ".")));
             }
 
             inputStream.close();
