@@ -114,7 +114,6 @@ public class VarianceTest {
 
             Variance.corrCol1.add(0.0);
             Variance.corrCol2.add(0.0);
-
     }
 
 
